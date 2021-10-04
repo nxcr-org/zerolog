@@ -6,8 +6,8 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/rs/zerolog"
-	"github.com/rs/zerolog/diode"
+	"github.com/nxcr-org/zerolog"
+	"github.com/nxcr-org/zerolog/diode"
 )
 
 func ExampleNewWriter() {

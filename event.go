@@ -251,6 +251,10 @@ func (e *Event) CustomerId(customerId string) *Event {
 	return e.Str("customerId", customerId)
 }
 
+func (e *Event) TraceId(traceId string) *Event {
+	return e.Str("traceId", traceId)
+}
+
 func (e *Event) SubscriptionId(subscriptionId string) *Event {
 	return e.Str("subscriptionId", subscriptionId)
 }

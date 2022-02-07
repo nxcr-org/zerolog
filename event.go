@@ -1,6 +1,7 @@
 package zerolog
 
 import (
+	"context"
 	"fmt"
 	"net"
 	"os"
@@ -27,6 +28,7 @@ type Event struct {
 	stack     bool   // enable error stack trace
 	ch        []Hook // hooks from context
 	skipFrame int    // The number of additional frames to skip when printing the caller.
+	ctx       context.Context
 }
 
 func putEvent(e *Event) {
@@ -64,6 +66,7 @@ func newEvent(w LevelWriter, level Level) *Event {
 	e.level = level
 	e.stack = false
 	e.skipFrame = 0
+	e.ctx = context.Background()
 	return e
 }
 
@@ -95,6 +98,14 @@ func (e *Event) Discard() *Event {
 	}
 	e.level = Disabled
 	return nil
+}
+
+func (e *Event) Context(ctx context.Context) *Event {
+	if e == nil {
+		return e
+	}
+	e.ctx = ctx
+	return e
 }
 
 // Msg sends the *Event with msg added as the message field if not empty.
@@ -138,7 +149,7 @@ func (e *Event) MsgFunc(createMsg func() string) {
 
 func (e *Event) msg(msg string) {
 	for _, hook := range e.ch {
-		hook.Run(e, e.level, msg)
+		hook.Run(e.ctx, e, e.level, msg)
 	}
 	if msg != "" {
 		e.buf = enc.AppendString(enc.AppendKey(e.buf, MessageFieldName), msg)

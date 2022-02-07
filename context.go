@@ -1,6 +1,7 @@
 package zerolog
 
 import (
+	"context"
 	"fmt"
 	"io/ioutil"
 	"math"
@@ -323,7 +324,7 @@ func (c Context) Floats64(key string, f []float64) Context {
 
 type timestampHook struct{}
 
-func (ts timestampHook) Run(e *Event, level Level, msg string) {
+func (ts timestampHook) Run(ctx context.Context, e *Event, level Level, msg string) {
 	e.Timestamp()
 }
 
@@ -376,7 +377,7 @@ func newCallerHook(skipFrameCount int) callerHook {
 	return callerHook{callerSkipFrameCount: skipFrameCount}
 }
 
-func (ch callerHook) Run(e *Event, level Level, msg string) {
+func (ch callerHook) Run(ctx context.Context, e *Event, level Level, msg string) {
 	switch ch.callerSkipFrameCount {
 	case useGlobalSkipFrameCount:
 		// Extra frames to skip (added by hook infra).

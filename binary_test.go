@@ -1,3 +1,4 @@
+//go:build binary_log
 // +build binary_log
 
 package zerolog
@@ -61,7 +62,7 @@ func ExampleLogger_Sample() {
 
 type LevelNameHook1 struct{}
 
-func (h LevelNameHook1) Run(e *Event, l Level, msg string) {
+func (h LevelNameHook1) Run(ctx context.Context, e *Event, l Level, msg string) {
 	if l != NoLevel {
 		e.Str("level_name", l.String())
 	} else {
@@ -71,7 +72,7 @@ func (h LevelNameHook1) Run(e *Event, l Level, msg string) {
 
 type MessageHook string
 
-func (h MessageHook) Run(e *Event, l Level, msg string) {
+func (h MessageHook) Run(ctx context.Context, e *Event, l Level, msg string) {
 	e.Str("the_message", msg)
 }
 

@@ -70,7 +70,7 @@
 //     // Create the hook:
 //     type SeverityHook struct{}
 //
-//     func (h SeverityHook) Run(e *zerolog.Event, level zerolog.Level, msg string) {
+//     func (h SeverityHook) Run(ctx context.Context, e *zerolog.Event, level zerolog.Level, msg string) {
 //          if level != zerolog.NoLevel {
 //              e.Str("severity", level.String())
 //          }

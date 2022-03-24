@@ -19,6 +19,12 @@ func (c Context) Logger() Logger {
 	return c.l
 }
 
+// Context adds the context.Context to the logger ctx.
+func (c Context) Context(ctx context.Context) Context {
+	c.l.ctx = ctx
+	return c
+}
+
 // Fields is a helper function to use a map or slice to set fields using type assertion.
 // Only map[string]interface{} and []interface{} are accepted. []interface{} must
 // alternate string keys and arbitrary values, and extraneous ones are ignored.

@@ -2,23 +2,24 @@ package zerolog
 
 import (
 	"bytes"
+	"context"
 	"io/ioutil"
 	"testing"
 )
 
 var (
-	levelNameHook = HookFunc(func(e *Event, level Level, msg string) {
+	levelNameHook = HookFunc(func(ctx context.Context, e *Event, level Level, msg string) {
 		levelName := level.String()
 		if level == NoLevel {
 			levelName = "nolevel"
 		}
 		e.Str("level_name", levelName)
 	})
-	simpleHook = HookFunc(func(e *Event, level Level, msg string) {
+	simpleHook = HookFunc(func(ctx context.Context, e *Event, level Level, msg string) {
 		e.Bool("has_level", level != NoLevel)
 		e.Str("test", "logged")
 	})
-	copyHook = HookFunc(func(e *Event, level Level, msg string) {
+	copyHook = HookFunc(func(ctx context.Context, e *Event, level Level, msg string) {
 		hasLevel := level != NoLevel
 		e.Bool("copy_has_level", hasLevel)
 		if hasLevel {
@@ -26,9 +27,9 @@ var (
 		}
 		e.Str("copy_msg", msg)
 	})
-	nopHook = HookFunc(func(e *Event, level Level, message string) {
+	nopHook = HookFunc(func(ctx context.Context, e *Event, level Level, message string) {
 	})
-	discardHook = HookFunc(func(e *Event, level Level, message string) {
+	discardHook = HookFunc(func(ctx context.Context, e *Event, level Level, message string) {
 		e.Discard()
 	})
 )

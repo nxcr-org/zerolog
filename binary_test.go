@@ -5,6 +5,7 @@ package zerolog
 
 import (
 	"bytes"
+	"context"
 	"errors"
 	"fmt"
 

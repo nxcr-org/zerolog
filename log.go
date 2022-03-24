@@ -99,6 +99,7 @@
 package zerolog
 
 import (
+	"context"
 	"fmt"
 	"io"
 	"io/ioutil"
@@ -199,6 +200,7 @@ type Logger struct {
 	level   Level
 	sampler Sampler
 	context []byte
+	ctx     context.Context
 	hooks   []Hook
 	stack   bool
 }
@@ -438,6 +440,9 @@ func (l *Logger) newEvent(level Level, done func(string)) *Event {
 	}
 	if l.context != nil && len(l.context) > 1 {
 		e.buf = enc.AppendObjectData(e.buf, l.context)
+	}
+	if l.ctx != nil {
+		e.ctx = l.ctx
 	}
 	if l.stack {
 		e.Stack()

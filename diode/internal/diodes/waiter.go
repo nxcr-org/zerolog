@@ -21,9 +21,9 @@ type WaiterConfigOption func(*Waiter)
 // will not change any results for adding data (Set()). Default is
 // context.Background().
 func WithWaiterContext(ctx context.Context) WaiterConfigOption {
-	return WaiterConfigOption(func(c *Waiter) {
+	return func(c *Waiter) {
 		c.ctx = ctx
-	})
+	}
 }
 
 // NewWaiter returns a new Waiter that wraps the given diode.
@@ -39,7 +39,12 @@ func NewWaiter(d Diode, opts ...WaiterConfigOption) *Waiter {
 
 	go func() {
 		<-w.ctx.Done()
+
+		// Mutex is strictly necessary here to avoid a race in Next() (between
+		// w.isDone() and w.c.Wait()) and w.c.Broadcast() here.
+		w.mu.Lock()
 		w.c.Broadcast()
+		w.mu.Unlock()
 	}()
 
 	return w

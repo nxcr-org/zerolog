@@ -240,11 +240,15 @@ func ExampleEvent_Array() {
 		Str("foo", "bar").
 		Array("array", zerolog.Arr().
 			Str("baz").
-			Int(1),
+			Int(1).
+			Dict(zerolog.Dict().
+				Str("bar", "baz").
+				Int("n", 1),
+			),
 		).
 		Msg("hello world")
 
-	// Output: {"foo":"bar","array":["baz",1],"message":"hello world"}
+	// Output: {"foo":"bar","array":["baz",1,{"bar":"baz","n":1}],"message":"hello world"}
 }
 
 func ExampleEvent_Array_object() {
@@ -309,7 +313,7 @@ func ExampleEvent_Interface() {
 }
 
 func ExampleEvent_Dur() {
-	d := time.Duration(10 * time.Second)
+	d := 10 * time.Second
 
 	log := zerolog.New(os.Stdout)
 
@@ -323,8 +327,8 @@ func ExampleEvent_Dur() {
 
 func ExampleEvent_Durs() {
 	d := []time.Duration{
-		time.Duration(10 * time.Second),
-		time.Duration(20 * time.Second),
+		10 * time.Second,
+		20 * time.Second,
 	}
 
 	log := zerolog.New(os.Stdout)
@@ -458,7 +462,7 @@ func ExampleContext_Interface() {
 }
 
 func ExampleContext_Dur() {
-	d := time.Duration(10 * time.Second)
+	d := 10 * time.Second
 
 	log := zerolog.New(os.Stdout).With().
 		Str("foo", "bar").
@@ -472,8 +476,8 @@ func ExampleContext_Dur() {
 
 func ExampleContext_Durs() {
 	d := []time.Duration{
-		time.Duration(10 * time.Second),
-		time.Duration(20 * time.Second),
+		10 * time.Second,
+		20 * time.Second,
 	}
 
 	log := zerolog.New(os.Stdout).With().
@@ -508,7 +512,7 @@ func ExampleContext_IPPrefix() {
 	// Output: {"Route":"192.168.0.0/24","message":"hello world"}
 }
 
-func ExampleContext_MacAddr() {
+func ExampleContext_MACAddr() {
 	mac := net.HardwareAddr{0x00, 0x14, 0x22, 0x01, 0x23, 0x45}
 	log := zerolog.New(os.Stdout).With().
 		MACAddr("hostMAC", mac).
